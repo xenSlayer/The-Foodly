@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "425670400042",
+    "firebase_url": "https://thefoodly-npj.firebaseio.com",
+    "project_id": "thefoodly-npj",
+    "storage_bucket": "thefoodly-npj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425670400042:android:9f7fbad2857cdd756f8b53",
+        "android_client_info": {
+          "package_name": "com.thefoodly.foodly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425670400042-q5m891ompfg366r4kidmev5112odjddl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6Gq6-jXDsIek33oN11Lyw1fTfrvg51Y4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425670400042-q5m891ompfg366r4kidmev5112odjddl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
