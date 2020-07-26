@@ -23,6 +23,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http:
+  html:
+  share:
+  fluttertoast:
+  google_fonts:
+  cached_network_image:
+  intl:
+  image:
+  font_awesome_flutter:
+  shimmer:
+  provider:
+  shared_preferences:
+  google_sign_in:
+  cloud_firestore:
+  firebase_core_web:
+  cloud_firestore_web:
+  firebase_auth:
+  firebase_storage:
+  image_picker:
+  badges:
+  flutter_slidable:
 
 
   # The following adds the Cupertino Icons font to your application.
