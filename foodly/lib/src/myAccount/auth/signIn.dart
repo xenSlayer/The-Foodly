@@ -39,17 +39,17 @@ class _SignInState extends State<SignIn> {
               color: bgCol,
               child: TextFormField(
                 validator: (val) {
-                  if (val.isEmpty) return "*Username is required";
+                  if (val.isEmpty) return "*Email is required";
                   return null;
                 },
                 controller: _email,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  labelText: 'Username or Email',
+                  labelText: 'Email',
                   labelStyle: TextStyle(
                     color: textFieldCol,
                   ),
-                  hintText: "Enter your username or Email",
+                  hintText: "Enter your Email",
                   hintStyle: TextStyle(color: textFieldCol),
                   border: OutlineInputBorder(),
                   contentPadding:
@@ -73,7 +73,7 @@ class _SignInState extends State<SignIn> {
                 controller: _password,
                 obscureText: _obscure,
                 obscuringCharacter: "*",
-                textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   suffixIcon: IconButton(
                     icon: _obscure

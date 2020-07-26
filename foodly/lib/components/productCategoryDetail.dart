@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly/components/shimmering/myshimmer.dart';
-import 'package:foodly/components/wooProductsByCategory.dart';
+import 'package:foodly/components/ProductsByCategory.dart';
 import 'package:foodly/constants/colors.dart';
 import 'package:foodly/constants/icons.dart';
 import 'package:foodly/models/category.dart';
@@ -64,7 +64,7 @@ class ProductCategoryDetail extends StatelessWidget {
             ),
           ),
           SliverFillRemaining(
-            child: WooProductsByCategory(categoryId: category.id,),
+            child: ProductsByCategory(categoryId: category.id,),
           ),
         ],
       ),

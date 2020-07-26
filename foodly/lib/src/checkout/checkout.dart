@@ -33,14 +33,15 @@ class _CheckoutState extends State<Checkout> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _deliveryAddress;
   TextEditingController _emailAddress;
-  TextEditingController _phoneNumber;
+  TextEditingController _phoneNumber = TextEditingController();
   TextEditingController _coupon;
   TextEditingController _specialNote;
   @override
   void initState() {
     _deliveryAddress = TextEditingController(text: widget.deliveryAddress);
     _emailAddress = TextEditingController(text: widget.emailAddress);
-    _phoneNumber = TextEditingController(text: widget.phoneNumber.toString());
+    // _phoneNumber = TextEditingController(text: widget.phoneNumber.toString());
+    _phoneNumber.text = widget.phoneNumber.toString() == "null" ? "" : widget.phoneNumber.toString();
     _coupon = TextEditingController();
     _specialNote = TextEditingController();
     super.initState();
@@ -187,7 +188,6 @@ class _CheckoutState extends State<Checkout> {
                                   );
                                   return orderedItem;
                                 }).toList(),
-                                // orderedItems: [],
                                 totalAmount: widget.total,
                                 userId: widget.userId,
                                 coupon: _coupon.text,

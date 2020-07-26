@@ -154,7 +154,7 @@ class UserRepository with ChangeNotifier {
     );
     Utils.saveToPrefereces(
       name: name,
-      photo: null,
+      photo: BLANK_IMAGE,
       userId: newUser.uid,
       email: user.email,
       phoneNumber: null,

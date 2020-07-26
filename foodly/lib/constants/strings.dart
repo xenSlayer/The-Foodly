@@ -19,4 +19,4 @@ const String COMPLETED = "completed";
 
 const String EMAIL_FIELD = "email";
 const String BLANK_IMAGE =
-    "https://firebasestorage.googleapis.com/v0/b/thefoodly-npj.appspot.com/o/blank_image.jpg?alt=media&token=e4abeac9-70bc-41dd-84f5-e4f4bd71a472";
+    "https://firebasestorage.googleapis.com/v0/b/thefoodly-npj.appspot.com/o/blank_image.jpg?alt=media&token=e4ed16e8-d31d-41fe-a2a8-b6f5a08200b3";

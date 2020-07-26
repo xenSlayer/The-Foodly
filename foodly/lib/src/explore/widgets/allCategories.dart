@@ -3,29 +3,12 @@ import 'package:foodly/components/productCategoryTile.dart';
 import 'package:foodly/models/category.dart';
 import 'package:foodly/services/db_services.dart';
 
-class Categories extends StatelessWidget {
-  // final List<WooProductCategory> categories;
-  // Categories({@required this.categories});
+class AllCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 100,
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
-      // child: categories.isNotEmpty ? ListView.separated(
-      //           scrollDirection: Axis.horizontal,
-      //           separatorBuilder: (_, index) {
-      //             return SizedBox(
-      //               width: 1.0,
-      //             );
-      //           },
-      //           itemCount: categories.length,
-      //           itemBuilder: (_, index) {
-      //             WooProductCategory productCategory = categories[index];
-      //             return ProductCategoryTile(
-      //               productCategory: productCategory,
-      //             );
-      //           },
-      //         ):MyShimmer.shimCont(100),
       child: StreamBuilder(
         stream: categoryItemDb.streamList(),
         builder:

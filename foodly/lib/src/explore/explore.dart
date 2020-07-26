@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:foodly/components/appbar.dart';
 import 'package:foodly/constants/colors.dart';
 import 'package:foodly/constants/icons.dart';
-import 'package:foodly/src/explore/widgets/categories.dart';
+import 'package:foodly/src/explore/widgets/allCategories.dart';
 import 'package:foodly/src/explore/widgets/mybanner.dart';
 import 'package:foodly/src/explore/widgets/searchBar.dart';
 import 'package:foodly/src/explore/widgets/userCircle.dart';
-import 'package:foodly/src/explore/widgets/wooProducts.dart';
+import 'package:foodly/src/explore/widgets/allProducts.dart';
+
 class Explore extends StatefulWidget {
-  // final List<WooProduct> products;
-  // final List<WooProductCategory> categories;
-  // Explore({
-  //   @required this.products,
-  //   @required this.categories,
-  // });
   @override
   _ExploreState createState() => _ExploreState();
 }
@@ -21,11 +16,11 @@ class Explore extends StatefulWidget {
 class _ExploreState extends State<Explore> {
   bool showSearch;
   String _location = "";
-  getLocation() async{
+  getLocation() async {
     _location = "Nepalgunj";
-    setState(() {
-    });
+    setState(() {});
   }
+
   @override
   void initState() {
     showSearch = false;
@@ -35,7 +30,6 @@ class _ExploreState extends State<Explore> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: CustomAppBar(
         leading: Container(
@@ -115,14 +109,10 @@ class _ExploreState extends State<Explore> {
                       style: TextStyle(fontSize: 20.0, color: secondCol),
                     ),
                   ),
-                  Categories(
-                    // categories: widget.categories,
-                  ),
+                  AllCategories(),
                   //products
                   Flexible(
-                    child: WooProducts(
-                      // products: widget.products,
-                    ),
+                    child: AllProducts(),
                   ),
                 ],
               ),
