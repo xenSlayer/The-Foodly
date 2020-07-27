@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodly_dashboard/src/dashboard/dashCarts.dart/dashCarts.dart';
 import 'package:foodly_dashboard/src/dashboard/dashCategories/dashCategories.dart';
+import 'package:foodly_dashboard/src/dashboard/dashOrders/dashCompletedOrder.dart';
 import 'package:foodly_dashboard/src/dashboard/dashOrders/dashOrders.dart';
+import 'package:foodly_dashboard/src/dashboard/dashOrders/dashProcessingOrder.dart';
 import 'package:foodly_dashboard/src/dashboard/dashProducts/dashProducts.dart';
 import 'package:foodly_dashboard/src/dashboard/dashboard.dart';
 
@@ -23,6 +25,8 @@ class App extends StatelessWidget {
         "/":(_) => Dashboard(),
         "/dashboard":(_) => Dashboard(),
         "/dashOrders":(_) => DashOrders(),
+        "/dashCompletedOrder":(_) => DashCompletedOrder(),
+        "/dashProcessingOrder":(_) => DashProcessingOrder(),
         "/dashCategories":(_) => DashCategories(),
         "/dashProducts":(_) => DashProducts(),
         "/dashCarts":(_) => DashCarts(),

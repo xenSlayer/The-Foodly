@@ -29,22 +29,22 @@ class OrderTile extends StatelessWidget {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-            color: order.orderState != PROCESSING ? mainCol : secondCol,
+            color: order.orderState != PROCESSING ? Colors.green : secondCol,
             shape: BoxShape.circle,
           ),
         ),
         title: Text(
-          "#${order.id}",
+          "${Utils.getFirstInitials(order.orderDate.toString())}",
           style: TextStyle(fontSize: 13),
         ),
         subtitle: Text(
-          "${Utils.getFirstInitials(order.orderDate.toString())}",
+          "#${order.id}",
           style: TextStyle(fontSize: 10),
         ),
         trailing: Text(
           "\t\t$currency \n${order.totalAmount}",
           style: TextStyle(
-            color: order.orderState != PROCESSING ? mainCol : secondCol,
+            color: order.orderState != PROCESSING ? Colors.green : secondCol,
           ),
         ),
       ),

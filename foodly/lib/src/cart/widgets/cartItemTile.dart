@@ -70,10 +70,10 @@ class CartItemTile extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 13.0, right: 8.0),
+                  padding: const EdgeInsets.only(left: 13.0, right: 4.0),
                   child: Text(
                     "$name",
-                    style: TextStyle(fontSize: 19.0, color: secondCol),
+                    style: TextStyle(fontSize: 16.0, color: secondCol),
                   ),
                 ),
                 //price,
@@ -81,14 +81,14 @@ class CartItemTile extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 13.0, top: 8.0),
                   child: Text(
                     "$quantity *$currency $price",
-                    style: TextStyle(fontSize: 13.0, color: mainCol),
+                    style: TextStyle(fontSize: 12.0, color: mainCol),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 13.0, top: 8.0),
+                  padding: const EdgeInsets.only(left: 13.0, top: 0.0),
                   child: Text(
                     "= $currency ${quantity * price}",
-                    style: TextStyle(fontSize: 13.0, color: mainCol),
+                    style: TextStyle(fontSize: 12.0, color: mainCol),
                   ),
                 ),
               ],

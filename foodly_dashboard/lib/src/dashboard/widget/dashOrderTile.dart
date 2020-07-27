@@ -58,7 +58,7 @@ class DashOrderTile extends StatelessWidget {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-            color: order.orderState != "processing" ? mainCol : secondCol,
+            color: order.orderState != PROCESSING ? Colors.green: secondCol,
             shape: BoxShape.circle,
           ),
         ),
@@ -73,7 +73,7 @@ class DashOrderTile extends StatelessWidget {
         trailing: Text(
           "\t\t$currency \n${order.totalAmount}",
           style: TextStyle(
-            color: order.orderState == "processing" ? mainCol : secondCol,
+            color: order.orderState != PROCESSING ? Colors.green : secondCol,
           ),
         ),
       ),

@@ -67,6 +67,24 @@ class DatabaseService<T extends DatabaseItem> {
         list.documents.map((doc) => fromDS(doc.documentID, doc.data)).toList());
   }
 
+  Stream<List<T>> streamCompletedOrderList() {
+    var ref = _db
+        .collection(collection)
+        .where("orderState", isEqualTo: COMPLETED);
+
+    return ref.snapshots().map((list) =>
+        list.documents.map((doc) => fromDS(doc.documentID, doc.data)).toList());
+  }
+
+  Stream<List<T>> streamProcessingOrderList() {
+    var ref = _db
+        .collection(collection)
+        .where("orderState", isEqualTo: PROCESSING);
+
+    return ref.snapshots().map((list) =>
+        list.documents.map((doc) => fromDS(doc.documentID, doc.data)).toList());
+  }
+
   Future<List<T>> getQueryList({List<QueryArgs> args = const []}) async {
     CollectionReference collref = _db.collection(collection);
     Query ref;

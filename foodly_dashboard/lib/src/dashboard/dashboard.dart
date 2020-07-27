@@ -21,7 +21,7 @@ class Dashboard extends StatelessWidget {
         ),
         centerTitle: false,
       ),
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -53,6 +53,16 @@ class Dashboard extends StatelessWidget {
                     routeName: "/dashCategories",
                     icon: Icons.category,
                     name: "CATEGORIES",
+                  ),
+                  DashTile(
+                    routeName: "/dashCompletedOrder",
+                    icon: Icons.done_all,
+                    name: "COMPLETED ORDERS",
+                  ),
+                  DashTile(
+                    routeName: "/dashProcessingOrder",
+                    icon: Icons.hourglass_empty,
+                    name: "PROCESSING ORDERS",
                   ),
                 ],
               ),
