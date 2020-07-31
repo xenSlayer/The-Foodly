@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foodly/constants/strings.dart';
+import 'package:foodly/models/caroSlide.dart';
 import 'package:foodly/models/cartItem.dart';
 import 'package:foodly/models/category.dart';
 import 'package:foodly/models/database_item.dart';
@@ -170,3 +171,8 @@ DatabaseService<Category> categoryItemDb = DatabaseService<Category>(
     CATEGORIES_COLLECTION,
     fromDS: (id, data) => Category.fromDS(id, data),
     toMap: (order) => order.toMap());
+
+DatabaseService<CaroSlide> caroSlideItemDb = DatabaseService<CaroSlide>(
+    CAROSLIDE_COLLECTION,
+    fromDS: (id, data) => CaroSlide.fromDS(id, data),
+    toMap: (caroSlide) => caroSlide.toMap());

@@ -4,7 +4,7 @@ import 'package:foodly/constants/colors.dart';
 import 'package:foodly/constants/icons.dart';
 import 'package:foodly/sharedPrefs/preferences.dart';
 import 'package:foodly/src/explore/widgets/allCategories.dart';
-import 'package:foodly/src/explore/widgets/mybanner.dart';
+import 'package:foodly/src/explore/widgets/mySlider.dart';
 import 'package:foodly/src/explore/widgets/userCircle.dart';
 import 'package:foodly/src/explore/widgets/allProducts.dart';
 import 'package:geolocator/geolocator.dart';
@@ -123,10 +123,10 @@ class _ExploreState extends State<Explore> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 95,
+            expandedHeight: 200,
             backgroundColor: bgCol,
             flexibleSpace: FlexibleSpaceBar(
-              background: MyBanner(),
+              background: MySlider(),
             ),
           ),
           SliverFillRemaining(
@@ -136,6 +136,8 @@ class _ExploreState extends State<Explore> {
                 children: [
                   //search
                   // showSearch ? SearchBar() : Container(),
+                  // //slider
+                  // MySlider(),
                   //categories
                   Padding(
                     padding: const EdgeInsets.only(
