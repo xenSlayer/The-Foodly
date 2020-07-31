@@ -11,6 +11,9 @@ import 'package:foodly/sharedPrefs/preferences.dart';
 import 'package:foodly/utilities/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/colors.dart';
+import '../constants/icons.dart';
+
 class ProductTile extends StatefulWidget {
   final Product product;
   ProductTile({
@@ -24,23 +27,23 @@ class ProductTile extends StatefulWidget {
 class _ProductTileState extends State<ProductTile> {
   String _userID;
 
-  getUserId()async{
+  getUserId() async {
     _userID = await Prefs.getuserId();
-    setState(() {
-    });
+    setState(() {});
   }
-  
+
   @override
   void initState() {
     getUserId();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final double wFC = Utils.getWidthByPercentage(context, 30);
     final double wSC = Utils.getWidthByPercentage(context, 52);
     final double wTC = Utils.getWidthByPercentage(context, 10);
-    final double hPT = 110.0;
+    final double hPT = 90.0;
 
     final CachedNetworkImage _cachedImage = CachedNetworkImage(
       imageUrl: widget.product.imageUrl,
@@ -62,59 +65,86 @@ class _ProductTileState extends State<ProductTile> {
           );
         }));
       },
-      child: Container(
-        color: bgCol,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Image
-            Container(
-              height: hPT,
-              width: wFC,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 9.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: bgCol,
+            boxShadow: [
+              BoxShadow(
+                color: mainCol.withOpacity(0.06),
+                spreadRadius: 5,
+                blurRadius: 5,
+                offset: Offset(0, 3), // changes position of shadow
               ),
-              child: _cachedImage,
-            ),
-            //Name, Description and Price
-            Container(
-              width: wSC,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${widget.product.name}",
-                      style: TextStyle(fontSize: 19.0, color: secondCol),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-                    child: Text(
-                      "$currency${widget.product.salePrice}",
-                      style: TextStyle(fontSize: 16.0, color: mainCol),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            //Add to cart button
-            Container(
-              width: wTC,
-              height: hPT,
-              color: secondCol,
-              child: Center(
-                child: IconButton( 
-                  icon: addIcon,
-                  onPressed: () {
-                    context.read<CartProvider>().addToCart(widget.product, _userID);
-                  },
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //Image
+
+              Container(
+                height: hPT,
+                width: wFC,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      bottomLeft: Radius.circular(5)),
+                  child: _cachedImage,
                 ),
               ),
-            ),
-          ],
+              //Name, Description and Price
+              Container(
+                width: wSC,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8.0, right: 8.0, top: 7.0),
+                      child: Text(
+                        "${widget.product.name}",
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.w600,
+                            color: secondCol),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, top: 5.0),
+                      child: Text(
+                        "$currency${widget.product.salePrice}",
+                        style: TextStyle(fontSize: 13.0, color: mainCol),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              //Add to cart button
+              Container(
+                decoration: BoxDecoration(
+                  color: secondCol,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(5),
+                      bottomRight: Radius.circular(5)),
+                ),
+                width: wTC,
+                height: hPT,
+                child: Center(
+                  child: IconButton(
+                    icon: add_to_cart,
+                    onPressed: () {
+                      context
+                          .read<CartProvider>()
+                          .addToCart(widget.product, _userID);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -93,4 +93,19 @@ class Prefs {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getInt('phoneNumber');
   }
+  //device location
+  static Future<bool> saveDeciceAddress(String deviceAddress) async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString('deviceAddress', deviceAddress);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<String> getDeviceAddress() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString('deviceAddress');
+  }
 }

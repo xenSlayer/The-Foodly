@@ -15,6 +15,7 @@ class Order extends DatabaseItem {
     this.userId,
     this.coupon,
     this.specialNote,
+    this.deviceLocation
   }) : super(id);
 
   final String id;
@@ -28,6 +29,7 @@ class Order extends DatabaseItem {
   final String userId;
   final String coupon;
   final String specialNote;
+  final String deviceLocation;
 
   factory Order.fromDS(String id,Map<String, dynamic> json) => Order(
         id: id,
@@ -42,6 +44,7 @@ class Order extends DatabaseItem {
         userId: json["userId"],
         coupon: json["coupon"],
         specialNote: json["specialNote"],
+        deviceLocation: json["deviceLocation"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -55,6 +58,7 @@ class Order extends DatabaseItem {
         "userId": userId,
         "coupon":coupon,
         "specialNote":specialNote,
+        "deviceLocation":deviceLocation,
       };
 }
 

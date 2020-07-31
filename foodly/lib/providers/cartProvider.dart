@@ -7,6 +7,7 @@ import 'package:foodly/utilities/utils.dart';
 
 class CartProvider with ChangeNotifier {
   List<CartItem> _cartList = [];
+  CartItem _cartItem;
 
   List<CartItem> get cartList => _cartList;
 
@@ -15,9 +16,34 @@ class CartProvider with ChangeNotifier {
     print("Cart List Updated - ${carts.length}");
   }
 
-  void addToCart(Product product, String userId, {int quantity = 1}) {
+  Future<bool> _containItem(Product product, String userId,
+      {int quantity = 1}) async {
+    CartItem cartItem = CartItem(
+        name: product.name,
+        imageUrl: product.imageUrl,
+        price: product.salePrice,
+        quantity: quantity,
+        productId: product.id,
+        userId: userId);
+    final cartStream = await cartItemDb.getQueryList(args: [
+      QueryArgs("userId",userId),
+    ]);
+    for (int i = 0; i < cartStream.length; i++) {
+      if (cartItem.name == cartStream[i].name) {
+        _cartItem = cartStream[i];
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void addToCart(Product product, String userId, {int quantity = 1}) async {
     if (userId == null) {
       Utils.showToast("Login To Add & View Cart");
+    } else if (await _containItem(product, userId)) {
+      // Utils.showToast("Already on the cart");
+      incrementCart(_cartItem);
+       Utils.showToast("${_cartItem.name}(${_cartItem.quantity + 1}) is updated to cart");
     } else {
       CartItem cartItem = CartItem(
           id: null,
@@ -28,7 +54,7 @@ class CartProvider with ChangeNotifier {
           productId: product.id,
           userId: userId);
       cartItemDb.createItem(cartItem);
-      Utils.showToast("${product.name} is added to cart");
+      Utils.showToast("${product.name}(${cartItem.quantity}) is added to cart");
     }
     notifyListeners();
   }
@@ -39,7 +65,7 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementCart(CartItem cartItem) {
+  void incrementCart(CartItem cartItem)async {
     CartItem upcartItem = CartItem(
         id: cartItem.id,
         name: cartItem.name,
@@ -48,11 +74,11 @@ class CartProvider with ChangeNotifier {
         quantity: cartItem.quantity + 1,
         productId: cartItem.productId,
         userId: cartItem.userId);
-    cartItemDb.updateItem(upcartItem);
+    await cartItemDb.updateItem(upcartItem);
     notifyListeners();
   }
 
-  void decrementCart(CartItem cartItem) {
+  void decrementCart(CartItem cartItem) async {
     int newQuantity = cartItem.quantity - 1;
     if (newQuantity == 0) {
       cartItemDb.removeItem(cartItem.id);
@@ -65,7 +91,7 @@ class CartProvider with ChangeNotifier {
           quantity: cartItem.quantity - 1,
           productId: cartItem.productId,
           userId: cartItem.userId);
-      cartItemDb.updateItem(upcartItem);
+      await cartItemDb.updateItem(upcartItem);
     }
     notifyListeners();
   }

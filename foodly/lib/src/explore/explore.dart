@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:foodly/components/appbar.dart';
 import 'package:foodly/constants/colors.dart';
 import 'package:foodly/constants/icons.dart';
+import 'package:foodly/sharedPrefs/preferences.dart';
 import 'package:foodly/src/explore/widgets/allCategories.dart';
 import 'package:foodly/src/explore/widgets/mybanner.dart';
-import 'package:foodly/src/explore/widgets/searchBar.dart';
 import 'package:foodly/src/explore/widgets/userCircle.dart';
 import 'package:foodly/src/explore/widgets/allProducts.dart';
+import 'package:geolocator/geolocator.dart';
+
+import '../../constants/colors.dart';
 
 class Explore extends StatefulWidget {
   @override
@@ -14,17 +17,49 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
-  bool showSearch;
-  String _location = "";
-  getLocation() async {
-    _location = "Nepalgunj";
-    setState(() {});
+  // bool showSearch;
+  Position _currentPosition;
+  String _currentAddress = "";
+  String _exactLocation = "";
+  // String _location = "Nepalgunj";
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+  _getMyCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+
+      _getAddressFromLatitudeLongitude();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  _getAddressFromLatitudeLongitude() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = p[0];
+
+      setState(() {
+        _currentAddress = "${place.subLocality},${place.locality}";
+        _exactLocation =
+            "${place.subLocality}, ${place.locality}, ${place.postalCode},${place.subAdministrativeArea}, ${place.country}, ${place.position}";
+            Prefs.saveDeciceAddress(_exactLocation);
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   void initState() {
-    showSearch = false;
-    getLocation();
+    // showSearch = false;
+    _getMyCurrentLocation();
     super.initState();
   }
 
@@ -40,9 +75,10 @@ class _ExploreState extends State<Explore> {
           child: IconButton(
             icon: searchIcon,
             onPressed: () {
-              setState(() {
-                showSearch = !showSearch;
-              });
+              // setState(() {
+              //   showSearch = !showSearch;
+              // });
+              Navigator.of(context).pushNamed("/searchScreen");
             },
           ),
         ),
@@ -65,17 +101,17 @@ class _ExploreState extends State<Explore> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      _location,
+                      _currentAddress,
                       style: TextStyle(color: mainCol, fontSize: 16.0),
                     ),
                   ),
                 ],
               ),
-              Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 8.0),
-                child: downArrowIcon,
-              ),
+              // Container(
+              //   alignment: Alignment.centerRight,
+              //   padding: const EdgeInsets.only(right: 8.0),
+              //   child: downArrowIcon,
+              // ),
             ],
           ),
         ),
@@ -99,14 +135,17 @@ class _ExploreState extends State<Explore> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //search
-                  showSearch ? SearchBar() : Container(),
+                  // showSearch ? SearchBar() : Container(),
                   //categories
                   Padding(
-                    padding:
-                        const EdgeInsets.only(left: 16.0, top: 5.0, bottom: 5),
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 17.0, bottom: 17.0),
                     child: Text(
                       "Categories",
-                      style: TextStyle(fontSize: 20.0, color: secondCol),
+                      style: TextStyle(
+                          fontSize: 25.0,
+                          color: mainCol,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
                   AllCategories(),

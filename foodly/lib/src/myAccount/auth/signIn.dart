@@ -106,17 +106,27 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             //Login Button
-            const SizedBox(height: 20.0),
-            RaisedButton(
-              color: mainCol,
-              textColor: bgCol,
-              child: Text("Log in"),
-              onPressed: () async {
-                Utils.hideKeyboard(textFieldFocus);
-                if (_formKey.currentState.validate()) {
-                  await _userRepository.signIn(_email.text, _password.text);
-                }
-              },
+            /*const SizedBox(
+              height: 20.0,
+            ),*/
+            const SizedBox(
+              height: 20.0,
+            ),
+
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: RaisedButton(
+                color: mainCol,
+                textColor: bgCol,
+                child: Text("Log in"),
+                onPressed: () async {
+                  Utils.hideKeyboard(textFieldFocus);
+                  if (_formKey.currentState.validate()) {
+                    await _userRepository.signIn(_email.text, _password.text);
+                  }
+                },
+              ),
             )
           ],
         ),

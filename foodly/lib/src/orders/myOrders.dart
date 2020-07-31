@@ -23,16 +23,25 @@ class MyOrders extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //my orders
+                    SizedBox(
+                      height: 10.0,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 10),
                       child: RichText(
                         text: TextSpan(
-                          style: TextStyle(color: black, fontSize: 26.0),
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 26.0,
+                              fontWeight: FontWeight.w800),
                           children: <TextSpan>[
                             TextSpan(text: "My\n"),
                             TextSpan(
                                 text: "Orders",
-                                style: TextStyle(color: mainCol, fontSize: 30)),
+                                style: TextStyle(
+                                    color: mainCol,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w800)),
                           ],
                         ),
                       ),
@@ -50,7 +59,8 @@ class MyOrders extends StatelessWidget {
                               height: Utils.getHeightByPercentage(context, 76),
                               color: bgCol,
                               child: StreamBuilder(
-                                stream: orderItemDb.streamOrderListByUserId(userID),
+                                stream:
+                                    orderItemDb.streamOrderListByUserId(userID),
                                 builder: (BuildContext context, snapshot) {
                                   if (snapshot.hasError)
                                     return QuietBox(

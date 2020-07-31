@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly/components/appbar.dart';
 import 'package:foodly/constants/colors.dart';
@@ -7,6 +8,7 @@ import 'package:foodly/models/cartItem.dart';
 import 'package:foodly/models/order.dart';
 import 'package:foodly/providers/cartProvider.dart';
 import 'package:foodly/services/db_services.dart';
+import 'package:foodly/sharedPrefs/preferences.dart';
 import 'package:foodly/utilities/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -36,12 +38,21 @@ class _CheckoutState extends State<Checkout> {
   TextEditingController _phoneNumber = TextEditingController();
   TextEditingController _coupon;
   TextEditingController _specialNote;
+  String _deviceLocation = "";
+  void getDeviceLocation() async {
+    _deviceLocation = await Prefs.getDeviceAddress();
+    setState(() {});
+  }
+
   @override
   void initState() {
+    getDeviceLocation();
     _deliveryAddress = TextEditingController(text: widget.deliveryAddress);
     _emailAddress = TextEditingController(text: widget.emailAddress);
     // _phoneNumber = TextEditingController(text: widget.phoneNumber.toString());
-    _phoneNumber.text = widget.phoneNumber.toString() == "null" ? "" : widget.phoneNumber.toString();
+    _phoneNumber.text = widget.phoneNumber.toString() == "null"
+        ? ""
+        : widget.phoneNumber.toString();
     _coupon = TextEditingController();
     _specialNote = TextEditingController();
     super.initState();
@@ -49,9 +60,10 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
-    deleteCartItems(){
+    deleteCartItems() {
       context.read<CartProvider>().deleteCart();
     }
+
     return Scaffold(
       appBar: CustomAppBar(
         leading: IconButton(
@@ -82,7 +94,7 @@ class _CheckoutState extends State<Checkout> {
                   controller: _deliveryAddress,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
-                    labelText: "Delivery Address",
+                    labelText: "Delivery Address*",
                     labelStyle: TextStyle(color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
@@ -100,7 +112,7 @@ class _CheckoutState extends State<Checkout> {
                   controller: _emailAddress,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
-                    labelText: "Email Address",
+                    labelText: "Email Address*",
                     labelStyle: TextStyle(color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
@@ -118,7 +130,7 @@ class _CheckoutState extends State<Checkout> {
                   controller: _phoneNumber,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
-                    labelText: "Phone Number",
+                    labelText: "Phone Number*",
                     labelStyle: TextStyle(color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
@@ -135,7 +147,7 @@ class _CheckoutState extends State<Checkout> {
                   controller: _coupon,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
-                    labelText: "Coupon",
+                    labelText: "Coupon(Optional)",
                     labelStyle: TextStyle(color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
@@ -153,7 +165,7 @@ class _CheckoutState extends State<Checkout> {
                   maxLines: 3,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    labelText: "Special Note",
+                    labelText: "Special Note(Optional)",
                     labelStyle: TextStyle(color: Colors.black),
                     filled: true,
                     fillColor: Colors.white,
@@ -169,34 +181,45 @@ class _CheckoutState extends State<Checkout> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(40))),
                   textColor: Colors.white,
-                  child: Text("Checkout", style: TextStyle(color: bgCol),),
+                  child: Text(
+                    "Checkout",
+                    style: TextStyle(color: bgCol),
+                  ),
                   onPressed: () async {
+                    ConnectivityResult connectivity =
+                        await Connectivity().checkConnectivity();
+                    if (connectivity == ConnectivityResult.none) {
+                      Utils.showToast(
+                          "Check Your Internet Connection! Try again later.");
+                    }
                     if (_formKey.currentState.validate()) {
                       Order myOrder = Order(
-                                deliveryAddress: _deliveryAddress.text,
-                                emailAddress: _emailAddress.text,
-                                mobileNumber: Utils.strToInt(_phoneNumber.text),
-                                orderDate: DateTime.now(),
-                                orderState: "processing",
-                                orderedItems: widget.cartList.map((cartItem){
-                                  OrderedItem orderedItem = OrderedItem(
-                                    name: cartItem.name,
-                                    imageUrl: cartItem.imageUrl,
-                                    price: cartItem.price,
-                                    productId: cartItem.productId,
-                                    quantity: cartItem.quantity,
-                                  );
-                                  return orderedItem;
-                                }).toList(),
-                                totalAmount: widget.total,
-                                userId: widget.userId,
-                                coupon: _coupon.text,
-                                specialNote: _specialNote.text,
-                              );
-                              orderItemDb.createItem(myOrder);
-                              deleteCartItems();
-                              // Utils.showToast("Order Placed Successfully");
-                              Navigator.of(context).pushReplacementNamed("/thankYou");
+                        deliveryAddress: _deliveryAddress.text,
+                        emailAddress: _emailAddress.text,
+                        mobileNumber: Utils.strToInt(_phoneNumber.text),
+                        orderDate: DateTime.now(),
+                        orderState: "processing",
+                        orderedItems: widget.cartList.map((cartItem) {
+                          OrderedItem orderedItem = OrderedItem(
+                            name: cartItem.name,
+                            imageUrl: cartItem.imageUrl,
+                            price: cartItem.price,
+                            productId: cartItem.productId,
+                            quantity: cartItem.quantity,
+                          );
+                          return orderedItem;
+                        }).toList(),
+                        totalAmount: widget.total,
+                        userId: widget.userId,
+                        coupon: _coupon.text,
+                        specialNote: _specialNote.text,
+                        deviceLocation: _deviceLocation,
+                      );
+                      await orderItemDb.createItem(myOrder).then((value) {
+                        deleteCartItems();
+                        // Utils.showToast("Order Placed Successfully");
+                        Navigator.of(context).pushReplacementNamed("/thankYou");
+                      });
                     } else {
                       Utils.showToast("Fix The Error First");
                     }

@@ -78,10 +78,16 @@ class OrderDetails extends StatelessWidget {
                   //billing address
                   dataDetailView(
                       "Billing Address:", "${order.deliveryAddress}"),
+                  dataDetailView(
+                      "Device Location:", "${order.deviceLocation}"),
                   //coupon
                   order.coupon != "" ? dataDetailView("Coupon:", "${order.coupon}"): Container(),
                   //special note
                   order.specialNote != "" ?dataDetailView("Special Note:", "${order.specialNote}"):Container(),
+                  //items
+                  dataDetailView(
+                      "Order Items:",""),
+                  
                 ],
               ),
             ),

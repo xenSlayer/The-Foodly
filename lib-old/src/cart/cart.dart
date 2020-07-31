@@ -1,0 +1,295 @@
+import 'package:flutter/material.dart';
+import 'package:foodly/components/quietBox.dart';
+import 'package:foodly/constants/colors.dart';
+import 'package:foodly/models/cartItem.dart';
+import 'package:foodly/providers/cartProvider.dart';
+import 'package:foodly/services/db_services.dart';
+import 'package:foodly/sharedPrefs/preferences.dart';
+import 'package:foodly/src/cart/widgets/cartItemTile.dart';
+import 'package:foodly/src/checkout/checkout.dart';
+import 'package:foodly/utilities/utils.dart';
+import 'package:provider/provider.dart';
+
+class Cart extends StatefulWidget {
+  const Cart({Key key}) : super(key: key);
+
+  @override
+  _CartState createState() => _CartState();
+}
+
+class _CartState extends State<Cart> {
+  String _userID;
+  String _deliveryAddress;
+  String _emailAddress;
+  int _mobileNumber;
+  List<CartItem> _cartLists;
+  int _total = 0;
+  getUserPrefs() async {
+    _userID = await Prefs.getuserId();
+    _deliveryAddress = await Prefs.getuserAddress();
+    _emailAddress = await Prefs.getuserEmail();
+    _mobileNumber = await Prefs.getuserPhoneNumber();
+    setState(() {
+      print("User Id - $_userID");
+      print("Delivery Address - $_deliveryAddress");
+      print("Email Address - $_emailAddress");
+      print("Mobile Number - $_mobileNumber");
+    });
+  }
+
+  @override
+  void initState() {
+    getUserPrefs();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    setCartList(List<CartItem> carts) {
+      context.read<CartProvider>().setCartList(carts);
+      _cartLists = carts;
+    }
+
+    setTotal(int total) {
+      _total = total;
+      print("Total - $_total");
+    }
+
+    // deleteCartItems(){
+    //   context.read<CartProvider>().deleteCart();
+    // }
+    return Scaffold(
+      backgroundColor: bgCol,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //my cart
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, bottom: 10),
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(color: black, fontSize: 26.0),
+                          children: <TextSpan>[
+                            TextSpan(text: "My\n"),
+                            TextSpan(
+                                text: "Cart",
+                                style: TextStyle(color: mainCol, fontSize: 30)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+
+                    _userID == null
+                        ? Container(
+                            height: Utils.getHeightByPercentage(context, 50),
+                            child: QuietBox(
+                              imgPath: "assets/images/login.png",
+                              text: "Login First To Add & View Cart",
+                              btnText: "Login Now",
+                              routeName: "/myAccount",
+                            ),
+                          )
+                        : Container(),
+                    //list of cart items
+                    _userID == null
+                        ? Container()
+                        : Flexible(
+                            child: Container(
+                              height: Utils.getHeightByPercentage(context, 50),
+                              child: StreamBuilder(
+                                stream: cartItemDb.streamListByUserId(_userID),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<List<CartItem>> snapshot) {
+                                  if (snapshot.hasError)
+                                    return QuietBox(
+                                      imgPath: "assets/images/error.png",
+                                      btnText: "Something went Wrong",
+                                    );
+                                  if (snapshot.hasData) {
+                                    var docList = snapshot.data;
+                                    setCartList(docList);
+                                    if (docList.isEmpty) {
+                                      // return Center(
+                                      //     child: Text("Your Cart is Empty."));
+                                      return QuietBox(
+                                        imgPath: "assets/images/empty_cart.png",
+                                        text: "Your cart is Empty",
+                                      );
+                                    }
+                                    return ListView.builder(
+                                      itemCount: docList.length,
+                                      itemBuilder: (_, i) {
+                                        return CartItemTile(
+                                          cartItem: snapshot.data[i],
+                                          index: i,
+                                        );
+                                      },
+                                    );
+                                  }
+                                  return Center(
+                                    child: Text("..."),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                    //delevery
+                    _userID == null
+                        ? Container()
+                        : Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      Utils.getWidthByPercentage(context, 25),
+                                ),
+                                Container(
+                                  width:
+                                      Utils.getWidthByPercentage(context, 40),
+                                  child: Text(
+                                    "Delivery",
+                                    style: TextStyle(
+                                        fontSize: 16.0, color: secondCol),
+                                  ),
+                                ),
+                                Container(
+                                  width:
+                                      Utils.getWidthByPercentage(context, 20),
+                                  child: Text(
+                                    "NRs. 0",
+                                    style: TextStyle(
+                                        fontSize: 16.0, color: secondCol),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                    //total
+                    _userID == null
+                        ? Container()
+                        : Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 15.0, vertical: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Total",
+                                  style: TextStyle(
+                                      fontSize: 21.0, color: secondCol),
+                                ),
+                                // _userID == null
+                                //     ? Text(
+                                //         "NRs. 0",
+                                //         style: TextStyle(
+                                //             fontSize: 21.0, color: secondCol),
+                                //       ):
+                                StreamBuilder(
+                                  stream:
+                                      cartItemDb.streamListByUserId(_userID),
+                                  builder: (_,
+                                      AsyncSnapshot<List<CartItem>> snapshot) {
+                                    if (snapshot.hasData) {
+                                      var docList = snapshot.data;
+                                      var total = 0;
+                                      for (int i = 0; i < docList.length; i++) {
+                                        var cartItem = docList[i];
+                                        total = total +
+                                            (cartItem.quantity *
+                                                cartItem.price);
+                                      }
+                                      setTotal(total);
+                                      return Text(
+                                        "NRs. $total",
+                                        style: TextStyle(
+                                            fontSize: 21.0, color: secondCol),
+                                      );
+                                    }
+                                    return Text(
+                                      "NRs. 0",
+                                      style: TextStyle(
+                                          fontSize: 21.0, color: secondCol),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                    //chekout
+                    _userID == null
+                        ? Container()
+                        : Container(
+                            alignment: Alignment.centerRight,
+                            child: RaisedButton(
+                              color: mainCol,
+                              textColor: secondCol,
+                              child: Text("Proceed To Checkout"),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(40),
+                                    bottomLeft: Radius.circular(40)),
+                              ),
+                              onPressed: () async {
+                                if (_userID == null || _emailAddress == null) {
+                                  Navigator.of(context).pushNamed("/myAccount");
+                                } else if (_cartLists.isEmpty) {
+                                  Utils.showToast("Your Cart is Empty");
+                                } else {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(builder: (_) {
+                                    return Checkout(
+                                      cartList: _cartLists,
+                                      deliveryAddress: _deliveryAddress,
+                                      emailAddress: _emailAddress,
+                                      phoneNumber: _mobileNumber,
+                                      total: _total,
+                                      userId: _userID,
+                                    );
+                                  }));
+                                  // Order myOrder = Order(
+                                  //   deliveryAddress: _deliveryAddress,
+                                  //   emailAddress: _emailAddress,
+                                  //   mobileNumber: _mobileNumber,
+                                  //   orderDate: DateTime.now(),
+                                  //   orderState: "processing",
+                                  //   orderedItems: _cartLists.map((cartItem){
+                                  //     OrderedItem orderedItem = OrderedItem(
+                                  //       name: cartItem.name,
+                                  //       imageUrl: cartItem.imageUrl,
+                                  //       price: cartItem.price,
+                                  //       productId: cartItem.productId,
+                                  //       quantity: cartItem.quantity,
+                                  //     );
+                                  //     return orderedItem;
+                                  //   }).toList(),
+                                  //   // orderedItems: [],
+                                  //   totalAmount: _total,
+                                  //   userId: _userID,
+                                  // );
+                                  // orderItemDb.createItem(myOrder);
+                                  // deleteCartItems();
+                                  // Utils.showToast("Order Placed Successfully");
+                                }
+                              },
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

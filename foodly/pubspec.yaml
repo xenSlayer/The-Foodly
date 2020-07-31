@@ -44,6 +44,8 @@ dependencies:
   image_picker:
   badges:
   flutter_slidable:
+  geolocator:
+  connectivity:
 
 
   # The following adds the Cupertino Icons font to your application.

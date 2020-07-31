@@ -32,7 +32,6 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-
     final UserRepository _userRepository = context.watch<UserRepository>();
     return Container(
       padding: EdgeInsets.all(10.0),
@@ -181,20 +180,26 @@ class _SignUpState extends State<SignUp> {
             ),
             //SignUp Button
             const SizedBox(height: 20.0),
-            RaisedButton(
-              color: mainCol,
-              textColor: bgCol,
-              child: Text("Create Account"),
-              onPressed: () async {
-                Utils.hideKeyboard(textFieldFocus);
-                if (_formKey.currentState.validate()) {
-                  if (_confirmPassword.text == _password.text) {
-                   await _userRepository.signUp(_email.text, _password.text, _username.text);
-                  }else{
-                    Utils.showToast("Password and Confirm Password doesn't match");
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: RaisedButton(
+                color: mainCol,
+                textColor: bgCol,
+                child: Text("Create Account"),
+                onPressed: () async {
+                  Utils.hideKeyboard(textFieldFocus);
+                  if (_formKey.currentState.validate()) {
+                    if (_confirmPassword.text == _password.text) {
+                      await _userRepository.signUp(
+                          _email.text, _password.text, _username.text);
+                    } else {
+                      Utils.showToast(
+                          "Password and Confirm Password doesn't match");
+                    }
                   }
-                }
-              },
+                },
+              ),
             )
           ],
         ),

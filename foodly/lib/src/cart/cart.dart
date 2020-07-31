@@ -10,6 +10,8 @@ import 'package:foodly/src/checkout/checkout.dart';
 import 'package:foodly/utilities/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants/colors.dart';
+
 class Cart extends StatefulWidget {
   const Cart({Key key}) : super(key: key);
 
@@ -30,10 +32,10 @@ class _CartState extends State<Cart> {
     _emailAddress = await Prefs.getuserEmail();
     _mobileNumber = await Prefs.getuserPhoneNumber();
     setState(() {
-      print("User Id - $_userID");
-      print("Delivery Address - $_deliveryAddress");
-      print("Email Address - $_emailAddress");
-      print("Mobile Number - $_mobileNumber");
+      // print("User Id - $_userID");
+      // print("Delivery Address - $_deliveryAddress");
+      // print("Email Address - $_emailAddress");
+      // print("Mobile Number - $_mobileNumber");
     });
   }
 
@@ -52,7 +54,7 @@ class _CartState extends State<Cart> {
 
     setTotal(int total) {
       _total = total;
-      print("Total - $_total");
+      // print("Total - $_total");
     }
 
     // deleteCartItems(){
@@ -65,21 +67,31 @@ class _CartState extends State<Cart> {
           slivers: [
             SliverFillRemaining(
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                // margin: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //my cart
-                    Padding(
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Container(
                       padding: const EdgeInsets.only(top: 8.0, bottom: 10),
+                       margin: EdgeInsets.symmetric(horizontal: 16.0),
                       child: RichText(
                         text: TextSpan(
-                          style: TextStyle(color: black, fontSize: 26.0),
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 26.0,
+                              fontWeight: FontWeight.w800),
                           children: <TextSpan>[
                             TextSpan(text: "My\n"),
                             TextSpan(
                                 text: "Cart",
-                                style: TextStyle(color: mainCol, fontSize: 30)),
+                                style: TextStyle(
+                                    color: mainCol,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w800)),
                           ],
                         ),
                       ),
@@ -90,6 +102,7 @@ class _CartState extends State<Cart> {
 
                     _userID == null
                         ? Container(
+                           margin: EdgeInsets.symmetric(horizontal: 16.0),
                             height: Utils.getHeightByPercentage(context, 50),
                             child: QuietBox(
                               imgPath: "assets/images/login.png",
@@ -104,6 +117,7 @@ class _CartState extends State<Cart> {
                         ? Container()
                         : Flexible(
                             child: Container(
+                               margin: EdgeInsets.symmetric(horizontal: 16.0),
                               height: Utils.getHeightByPercentage(context, 50),
                               child: StreamBuilder(
                                 stream: cartItemDb.streamListByUserId(_userID),
@@ -142,44 +156,53 @@ class _CartState extends State<Cart> {
                               ),
                             ),
                           ),
-                    //delevery
-                    _userID == null
-                        ? Container()
-                        : Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width:
-                                      Utils.getWidthByPercentage(context, 25),
-                                ),
-                                Container(
-                                  width:
-                                      Utils.getWidthByPercentage(context, 40),
-                                  child: Text(
-                                    "Delivery",
-                                    style: TextStyle(
-                                        fontSize: 16.0, color: secondCol),
-                                  ),
-                                ),
-                                Container(
-                                  width:
-                                      Utils.getWidthByPercentage(context, 20),
-                                  child: Text(
-                                    "NRs. 0",
-                                    style: TextStyle(
-                                        fontSize: 16.0, color: secondCol),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                    // //delevery
+                    // _userID == null
+                    //     ? Container()
+                    //     : Container(
+                    //         margin: EdgeInsets.only(top: 10),
+                    //         child: Row(
+                    //           children: [
+                    //             /*SizedBox(
+                    //               width:
+                    //                   Utils.getWidthByPercentage(context, 25),
+                    //             ),*/
+                    //             /* Container(
+                    //               width:
+                    //                   Utils.getWidthByPercentage(context, 40),
+                    //               child: Text(
+                    //                 "Delivery",
+                    //                 style: TextStyle(
+                    //                     fontSize: 16.0, color: secondCol),
+                    //               ),
+                    //             ),
+                    //             Container(
+                    //               width:
+                    //                   Utils.getWidthByPercentage(context, 20),
+                    //               child: Text(
+                    //                 "NRs. 0",
+                    //                 style: TextStyle(
+                    //                     fontSize: 16.0, color: secondCol),
+                    //               ),
+                    //             ),*/
+                    //           ],
+                    //         ),
+                    //       ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15.0),
+                      child: Container(
+                        height: 1.0,
+                        width: double.infinity,
+                        color: mainCol,
+                      ),
+                    ),
+                    //total
                     //total
                     _userID == null
                         ? Container()
                         : Container(
                             margin: EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 8),
+                                horizontal: 16.0, vertical: 8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -225,62 +248,78 @@ class _CartState extends State<Cart> {
                               ],
                             ),
                           ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
                     //chekout
                     _userID == null
                         ? Container()
                         : Container(
-                            alignment: Alignment.centerRight,
-                            child: RaisedButton(
-                              color: mainCol,
-                              textColor: secondCol,
-                              child: Text("Proceed To Checkout"),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(40),
-                                    bottomLeft: Radius.circular(40)),
-                              ),
-                              onPressed: () async {
-                                if (_userID == null || _emailAddress == null) {
-                                  Navigator.of(context).pushNamed("/myAccount");
-                                } else if (_cartLists.isEmpty) {
-                                  Utils.showToast("Your Cart is Empty");
-                                } else {
-                                  Navigator.of(context)
-                                      .push(MaterialPageRoute(builder: (_) {
-                                    return Checkout(
-                                      cartList: _cartLists,
-                                      deliveryAddress: _deliveryAddress,
-                                      emailAddress: _emailAddress,
-                                      phoneNumber: _mobileNumber,
-                                      total: _total,
-                                      userId: _userID,
-                                    );
-                                  }));
-                                  // Order myOrder = Order(
-                                  //   deliveryAddress: _deliveryAddress,
-                                  //   emailAddress: _emailAddress,
-                                  //   mobileNumber: _mobileNumber,
-                                  //   orderDate: DateTime.now(),
-                                  //   orderState: "processing",
-                                  //   orderedItems: _cartLists.map((cartItem){
-                                  //     OrderedItem orderedItem = OrderedItem(
-                                  //       name: cartItem.name,
-                                  //       imageUrl: cartItem.imageUrl,
-                                  //       price: cartItem.price,
-                                  //       productId: cartItem.productId,
-                                  //       quantity: cartItem.quantity,
-                                  //     );
-                                  //     return orderedItem;
-                                  //   }).toList(),
-                                  //   // orderedItems: [],
-                                  //   totalAmount: _total,
-                                  //   userId: _userID,
-                                  // );
-                                  // orderItemDb.createItem(myOrder);
-                                  // deleteCartItems();
-                                  // Utils.showToast("Order Placed Successfully");
-                                }
-                              },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                RaisedButton(
+                                  color: mainCol,
+                                  textColor: secondCol,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 18.0, horizontal: 32.0),
+                                    child: Text(
+                                      "Checkout",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(40),
+                                        bottomLeft: Radius.circular(40)),
+                                  ),
+                                  onPressed: () async {
+                                    if (_userID == null ||
+                                        _emailAddress == null) {
+                                      Navigator.of(context)
+                                          .pushNamed("/myAccount");
+                                    } else if (_cartLists.isEmpty) {
+                                      Utils.showToast("Your Cart is Empty");
+                                    } else {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(builder: (_) {
+                                        return Checkout(
+                                          cartList: _cartLists,
+                                          deliveryAddress: _deliveryAddress,
+                                          emailAddress: _emailAddress,
+                                          phoneNumber: _mobileNumber,
+                                          total: _total,
+                                          userId: _userID,
+                                        );
+                                      }));
+                                      // Order myOrder = Order(
+                                      //   deliveryAddress: _deliveryAddress,
+                                      //   emailAddress: _emailAddress,
+                                      //   mobileNumber: _mobileNumber,
+                                      //   orderDate: DateTime.now(),
+                                      //   orderState: "processing",
+                                      //   orderedItems: _cartLists.map((cartItem){
+                                      //     OrderedItem orderedItem = OrderedItem(
+                                      //       name: cartItem.name,
+                                      //       imageUrl: cartItem.imageUrl,
+                                      //       price: cartItem.price,
+                                      //       productId: cartItem.productId,
+                                      //       quantity: cartItem.quantity,
+                                      //     );
+                                      //     return orderedItem;
+                                      //   }).toList(),
+                                      //   // orderedItems: [],
+                                      //   totalAmount: _total,
+                                      //   userId: _userID,
+                                      // );
+                                      // orderItemDb.createItem(myOrder);
+                                      // deleteCartItems();
+                                      // Utils.showToast("Order Placed Successfully");
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                   ],

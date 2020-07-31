@@ -109,7 +109,7 @@ class _LoginState extends State<Login> {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10.0),
+                  margin: EdgeInsets.only(top: 30.0),
                   child: RichText(
                     text: TextSpan(
                       style: TextStyle(fontSize: 18),
@@ -118,11 +118,12 @@ class _LoginState extends State<Login> {
                           text: signInForm
                               ? "Not yet a member, "
                               : "Already a member, ",
-                          style: TextStyle(color: textFieldCol),
+                          style: TextStyle(color: textFieldCol, fontSize: 12.0),
                         ),
                         TextSpan(
                           text: signInForm ? "Sign Up" : "Sign In",
                           style: TextStyle(
+                              fontSize: 13.0,
                               color: mainCol,
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold),
